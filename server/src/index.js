@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
 import authRoutes from './routes/auth.js';
 import jobsRoutes from './routes/jobs.js';
 import { initDatabase } from './database/init.js';
@@ -20,7 +20,7 @@ app.use(express.json());
 // Initialize database
 await initDatabase();
 
-// Routes
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/jobs', jobsRoutes);
 
@@ -28,6 +28,16 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// Serve static React client build
+const clientPath = join(__dirname, '../../client/dist');
+app.use(express.static(clientPath));
+
+// SPA fallback - serve index.html for all non-API routes
+app.get('*', (req, res) => {
+  res.sendFile(join(clientPath, 'index.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
