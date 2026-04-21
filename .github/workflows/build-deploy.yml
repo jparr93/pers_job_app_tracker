@@ -74,6 +74,6 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "job-app-tracker"
+          app-name: "app-jdtrack-wcus-001"
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ./deploy-package/app.zip
