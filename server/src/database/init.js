@@ -2,9 +2,13 @@ import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { mkdirSync } from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const dbPath = join(__dirname, '../../data/jobs.db');
+
+// Ensure data directory exists
+mkdirSync(join(__dirname, '../../data'), { recursive: true });
 
 let db;
 
