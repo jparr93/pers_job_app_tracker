@@ -1,4 +1,4 @@
-name: Build and Deploy to Azure
+name: Build and Deploy FUT Stats App to Azure
 
 on:
   push:
@@ -26,26 +26,37 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: stats-app/package.json
       
-      - name: Install root dependencies
+      - name: Install backend dependencies
+        working-directory: ./stats-app
         run: npm install
       
-      - name: Install server dependencies
-        working-directory: ./server
-        run: npm install
-      
-      - name: Install client dependencies and build
-        working-directory: ./client
+      - name: Install client dependencies and build React
+        working-directory: ./stats-app/client
         run: npm install && npm run build
       
-      - name: Build server
-        run: npm run build --workspace=server
+      - name: Run linter
+        working-directory: ./stats-app
+        run: npm run lint
+        continue-on-error: true
+      
+      - name: Run tests
+        working-directory: ./stats-app
+        run: npm test
+        continue-on-error: true
+      
+      - name: Verify React build output
+        run: |
+          echo "Checking for React build output:"
+          ls -la stats-app/client/build/ || echo "Build folder not found!"
       
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: .
+          path: stats-app/
           retention-days: 7
 
   deploy:
@@ -65,15 +76,23 @@ jobs:
           name: build-artifacts
           path: ./deploy-package
       
+      - name: Check downloaded structure
+        run: |
+          echo "Contents of deploy-package:"
+          ls -la ./deploy-package/
+          echo ""
+          echo "Contents of deploy-package recursively:"
+          find ./deploy-package -type f | head -20
+      
       - name: Create deployment package
         run: |
           cd ./deploy-package
-          zip -r app.zip . -x "node_modules/*" "client/node_modules/*" "server/node_modules/*" ".git/*" ".gitignore" "client/src/*" "server/src/*"
+          zip -r app.zip . -x "client/node_modules/*" ".git/*" ".gitignore"
           ls -lah app.zip
       
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "job-app-tracker"
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          app-name: "app-stats-wusc-001"
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
           package: ./deploy-package/app.zip
