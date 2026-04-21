@@ -1,0 +1,22 @@
+{
+  "name": "job-app-tracker",
+  "version": "1.0.0",
+  "description": "Track job applications with Kanban board, templates, and job hunting advice",
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=server & npm run dev --workspace=client",
+    "build": "npm run build --workspace=server && npm run build --workspace=client",
+    "start": "node server/dist/index.js",
+    "install-all": "npm install && npm install --workspace=server && npm install --workspace=client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
