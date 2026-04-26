@@ -120,8 +120,6 @@ export default function Templates({ user, onLogout }) {
             ← Back to Home
           </Link>
         </div>
-          </Link>
-        </div>
       </div>
     </div>
   );
