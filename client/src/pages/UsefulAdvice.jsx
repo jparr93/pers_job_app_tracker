@@ -67,31 +67,31 @@ export default function UsefulAdvice({ user, onLogout }) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
       <Navigation user={user} onLogout={onLogout} />
 
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2 text-center">
+        <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2 text-center">
           Job Hunting Tips & Advice
         </h1>
-        <p className="text-center text-gray-600 mb-12 text-lg">
+        <p className="text-center text-slate-600 dark:text-slate-400 mb-12 text-lg">
           Expert advice to help you succeed in your job search
         </p>
 
         <div className="space-y-8">
           {tips.map((section) => (
-            <div key={section.category} className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+            <div key={section.category} className="bg-white dark:bg-slate-800 rounded-xl shadow-md-pro dark:shadow-lg dark:shadow-slate-900 overflow-hidden border border-slate-200 dark:border-slate-700">
+              <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 dark:from-indigo-700 dark:to-indigo-900 px-6 py-4">
                 <h2 className="text-2xl font-bold text-white">{section.category}</h2>
               </div>
               <div className="p-6">
                 <ul className="space-y-4">
                   {section.tips.map((tip, idx) => (
                     <li key={idx} className="flex items-start">
-                      <span className="text-blue-600 mr-3 font-bold text-lg flex-shrink-0">
+                      <span className="text-indigo-600 dark:text-indigo-400 mr-3 font-bold text-lg flex-shrink-0">
                         •
                       </span>
-                      <span className="text-gray-700">{tip}</span>
+                      <span className="text-slate-700 dark:text-slate-300">{tip}</span>
                     </li>
                   ))}
                 </ul>
@@ -100,14 +100,14 @@ export default function UsefulAdvice({ user, onLogout }) {
           ))}
         </div>
 
-        <div className="bg-green-50 border border-green-200 rounded-lg p-8 mt-12 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Remember!</h2>
-          <p className="text-gray-700 text-lg mb-4">
+        <div className="bg-emerald-50 dark:bg-emerald-900 dark:bg-opacity-20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-8 mt-12 mb-8">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Remember!</h2>
+          <p className="text-slate-700 dark:text-slate-300 text-base mb-4">
             Rejection is not personal - many factors go into hiring decisions beyond just your qualifications.
             Stay resilient, keep improving, and the right opportunity will come along. Every interview is
             practice for the next one, and every application brings you closer to your goal!
           </p>
-          <p className="text-gray-700 text-lg font-semibold">
+          <p className="text-slate-700 dark:text-slate-300 text-base font-semibold">
             You\'ve got this! 💪
           </p>
         </div>
@@ -115,7 +115,7 @@ export default function UsefulAdvice({ user, onLogout }) {
         <div className="flex justify-center">
           <Link
             to="/"
-            className="text-blue-600 hover:text-blue-700 font-medium"
+            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium text-sm transition-colors"
           >
             ← Back to Home
           </Link>

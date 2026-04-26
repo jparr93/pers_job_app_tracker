@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import JobTracker from './pages/JobTracker';
@@ -27,31 +28,33 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-lg text-gray-600">Loading...</p>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <p className="text-lg text-slate-600 dark:text-slate-400">Loading...</p>
       </div>
     );
   }
 
   return (
-    <Router>
-      <Routes>
-        {!user ? (
-          <>
-            <Route path="/login" element={<Login onLogin={(user) => setUser(user)} />} />
-            <Route path="*" element={<Navigate to="/login" />} />
-          </>
-        ) : (
-          <>
-            <Route path="/" element={<Home user={user} onLogout={handleLogout} />} />
-            <Route path="/jobs" element={<JobTracker user={user} onLogout={handleLogout} />} />
-            <Route path="/templates" element={<Templates user={user} onLogout={handleLogout} />} />
-            <Route path="/advice" element={<UsefulAdvice user={user} onLogout={handleLogout} />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </>
-        )}
-      </Routes>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          {!user ? (
+            <>
+              <Route path="/login" element={<Login onLogin={(user) => setUser(user)} />} />
+              <Route path="*" element={<Navigate to="/login" />} />
+            </>
+          ) : (
+            <>
+              <Route path="/" element={<Home user={user} onLogout={handleLogout} />} />
+              <Route path="/jobs" element={<JobTracker user={user} onLogout={handleLogout} />} />
+              <Route path="/templates" element={<Templates user={user} onLogout={handleLogout} />} />
+              <Route path="/advice" element={<UsefulAdvice user={user} onLogout={handleLogout} />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </>
+          )}
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 

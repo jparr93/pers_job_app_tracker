@@ -28,15 +28,15 @@ export default function Home({ user, onLogout }) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
       <Navigation user={user} onLogout={onLogout} />
 
       <div className="max-w-6xl mx-auto px-4 py-16">
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-5xl font-bold text-slate-900 dark:text-white mb-4">
             Welcome, {user?.username}!
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-slate-600 dark:text-slate-400">
             Track your job applications and land your dream job
           </p>
         </div>
@@ -46,12 +46,12 @@ export default function Home({ user, onLogout }) {
             <Link
               key={feature.link}
               to={feature.link}
-              className="transform hover:scale-105 transition duration-300"
+              className="group"
             >
-              <div className={`bg-gradient-to-br ${feature.color} rounded-xl shadow-lg p-8 text-white h-full`}>
+              <div className={`bg-gradient-to-br ${feature.color} rounded-xl shadow-md-pro hover:shadow-lg-pro transition-all duration-300 p-8 text-white h-full transform group-hover:translate-y--2`}>
                 <div className="text-7xl mb-6">{feature.icon}</div>
-                <h2 className="text-3xl font-bold mb-3">{feature.title}</h2>
-                <p className="text-lg opacity-90">{feature.description}</p>
+                <h2 className="text-2xl font-bold mb-3">{feature.title}</h2>
+                <p className="text-base opacity-95">{feature.description}</p>
               </div>
             </Link>
           ))}

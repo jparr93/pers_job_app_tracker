@@ -4,6 +4,7 @@
 
 html {
   scroll-behavior: smooth;
+  @apply transition-colors duration-200;
 }
 
 body {
@@ -12,4 +13,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@layer components {
+  .input-field {
+    @apply w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors shadow-sm-pro;
+  }
+
+  .card-base {
+    @apply bg-white dark:bg-slate-800 rounded-xl shadow-md-pro dark:shadow-lg dark:shadow-slate-900 border border-slate-200 dark:border-slate-700;
+  }
 }

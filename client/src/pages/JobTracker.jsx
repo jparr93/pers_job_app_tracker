@@ -65,10 +65,18 @@ export default function JobTracker({ user, onLogout }) {
 
   const handleUpdateStatus = async (jobId, newStatus) => {
     try {
+      // Optimistic update - update local state immediately
+      const updatedJobs = jobs.map((job) =>
+        job.id === jobId ? { ...job, status: newStatus } : job
+      );
+      setJobs(updatedJobs);
+
+      // Make API call in background
       await jobsAPI.update(jobId, { status: newStatus });
-      await fetchJobs();
     } catch (err) {
+      // Revert on error
       setError('Failed to update job status');
+      await fetchJobs();
       console.error(err);
     }
   };
@@ -86,62 +94,62 @@ export default function JobTracker({ user, onLogout }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
       <Navigation user={user} onLogout={onLogout} />
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">Job Tracker</h1>
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">Job Tracker</h1>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition"
+            className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors shadow-sm-pro"
           >
             {showForm ? 'Cancel' : '+ Add Job'}
           </button>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+          <div className="bg-rose-50 dark:bg-rose-900 dark:bg-opacity-20 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-400 px-4 py-3 rounded-lg mb-4 text-sm">
             {error}
           </div>
         )}
 
         {showForm && (
-          <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm-pro dark:shadow-lg dark:shadow-slate-900 p-6 mb-8 border border-slate-200 dark:border-slate-700">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Job Title *
                 </label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Job Link
                 </label>
                 <input
                   type="url"
                   value={formData.link}
                   onChange={(e) => setFormData({ ...formData, link: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Status
                 </label>
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                 >
                   <option>Saved</option>
                   <option>Started</option>
@@ -153,51 +161,51 @@ export default function JobTracker({ user, onLogout }) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Application Date
                 </label>
                 <input
                   type="date"
                   value={formData.applicationDate}
                   onChange={(e) => setFormData({ ...formData, applicationDate: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Key Contacts
                 </label>
                 <input
                   type="text"
                   value={formData.keyContacts}
                   onChange={(e) => setFormData({ ...formData, keyContacts: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                   placeholder="Name, email, or phone"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Salary Expectations
                 </label>
                 <input
                   type="text"
                   value={formData.salaryExpectations}
                   onChange={(e) => setFormData({ ...formData, salaryExpectations: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                   placeholder="e.g., £50,000 - £60,000"
                 />
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Notes
                 </label>
                 <textarea
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                   rows="3"
                 />
               </div>
@@ -205,7 +213,7 @@ export default function JobTracker({ user, onLogout }) {
 
             <button
               type="submit"
-              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition"
+              className="mt-6 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors shadow-sm-pro"
             >
               Add Job
             </button>
@@ -214,7 +222,7 @@ export default function JobTracker({ user, onLogout }) {
 
         {loading ? (
           <div className="flex justify-center items-center h-96">
-            <p className="text-lg text-gray-600">Loading jobs...</p>
+            <p className="text-lg text-slate-600 dark:text-slate-400">Loading jobs...</p>
           </div>
         ) : (
           <KanbanBoard
@@ -224,10 +232,10 @@ export default function JobTracker({ user, onLogout }) {
           />
         )}
 
-        <div className="mt-8 flex justify-center">
+        <div className="mt-12 flex justify-center">
           <Link
             to="/"
-            className="text-blue-600 hover:text-blue-700 font-medium"
+            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium text-sm"
           >
             ← Back to Home
           </Link>
